@@ -206,9 +206,10 @@ export default function OneLinkFallbackPage() {
 
           <div className="card qrCard">
             <p className="label">QR code</p>
-            <div id={QR_CONTAINER_ID} className="qrBox">
-              {generatedUrl ? null : <span>QR will appear here</span>}
-            </div>
+            <div
+              id={QR_CONTAINER_ID}
+              className={`qrBox ${generatedUrl ? "hasQr" : "empty"}`}
+            />
             <p className="hint">
               Scan this QR with a mobile device that has the app installed to
               validate app redirect and custom attributes.
@@ -413,6 +414,11 @@ export default function OneLinkFallbackPage() {
           border: 1px dashed var(--border);
           border-radius: 18px;
           background: #fbfcff;
+          color: var(--muted);
+        }
+
+        .qrBox.empty::before {
+          content: "QR will appear here";
           color: var(--muted);
         }
 
