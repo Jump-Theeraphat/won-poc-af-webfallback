@@ -8,6 +8,8 @@ Next.js Pages Router POC สำหรับทดสอบ AppsFlyer OneLink des
 - Fallback route: `/onelink-fallback`
 - Page file: `src/pages/onelink-fallback.tsx`
 - Free cloud target: Vercel
+- Deployed domain: `https://won-poc-af-webfallback.vercel.app`
+- Deployed fallback URL: `https://won-poc-af-webfallback.vercel.app/onelink-fallback`
 - Test OneLink: `https://ktc-mobile-uat.onelink.me/egql/n3tzlto9`
 - Smart Script template URL in page: `https://ktc-mobile-uat.onelink.me/egql`
 
@@ -50,6 +52,12 @@ Test with custom query params:
 http://localhost:3000/onelink-fallback?source_code=src001&agent_code=agent001&branch_code=branch001
 ```
 
+Test the deployed page with custom query params:
+
+```text
+https://won-poc-af-webfallback.vercel.app/onelink-fallback?source_code=web_test_source_001&agent_code=web_test_agent_001&branch_code=web_test_branch_001
+```
+
 ## Deploy To Vercel
 
 1. Push this project to a Git repository, or import the local project with Vercel CLI.
@@ -58,7 +66,14 @@ http://localhost:3000/onelink-fallback?source_code=src001&agent_code=agent001&br
 4. Set the AppsFlyer OneLink desktop fallback URL to:
 
 ```text
-https://<your-vercel-domain>/onelink-fallback
+https://won-poc-af-webfallback.vercel.app/onelink-fallback
+```
+
+Ask the PO/Appsflyer admin to allowlist the domain or full fallback URL:
+
+```text
+https://won-poc-af-webfallback.vercel.app
+https://won-poc-af-webfallback.vercel.app/onelink-fallback
 ```
 
 ## Checklist
@@ -72,17 +87,20 @@ https://<your-vercel-domain>/onelink-fallback
 - [x] Show generated link.
 - [x] Add copy link button.
 - [x] Show QR code from generated link.
+- [x] Fix QR DOM conflict by keeping the Smart Script QR container empty and rendering the placeholder with CSS.
 - [x] Add debug panel for incoming and generated query params.
 - [x] Run `npm install`.
 - [x] Run `npm run lint`.
 - [x] Run `npm run build`.
 - [x] Run `npm run dev`.
 - [x] Open `/onelink-fallback` locally.
+- [x] Deploy to Vercel at `https://won-poc-af-webfallback.vercel.app`.
 - [ ] Verify generated URL includes custom attributes.
 - [ ] Verify QR opens the generated link on mobile.
-- [ ] Deploy to Vercel.
 - [ ] Configure OneLink desktop fallback to the Vercel URL.
 
 ## Notes
 
 The sample Smart Script file uses `oneLinkURL = "https://ktc-mobile-uat.onelink.me/egql"`, while the user-facing test link is `https://ktc-mobile-uat.onelink.me/egql/n3tzlto9`. This POC follows the sample script and uses the template URL for Smart Script generation. During testing, verify in AppsFlyer that this is the expected template URL for generated outgoing links.
+
+The QR container must stay empty in React because AppsFlyer Smart Script mutates the QR DOM directly. The placeholder is rendered with CSS `::before` to avoid React/Smart Script DOM ownership conflicts such as `Failed to execute 'removeChild' on 'Node'`.
